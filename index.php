@@ -1,79 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require_once __DIR__ . "/assets/controller/sql_functions.php";
+header("Content-Type: application/json");
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoginPage</title>
+// POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["opt"])) {
+        // CREATE
+        if ($_POST["opt"] == "create_User")
+            echo json_encode(create_User($_POST["email"], $_POST["password"], $_POST["name"], $_POST["surname"]));
 
-  <!-- Bootstrap Css-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
-  <!-- Bootstrap Css end-->
+        // UPDATE
+        elseif ($_POST["opt"] == "update_User")
+            echo json_encode(update_User($_POST["id"], $_POST["email"], $_POST["password"], $_POST["name"], $_POST["surname"]));
 
-  <link rel="stylesheet" href="./assets/css/style.css" />
+        // SESSION
+        elseif ($_POST["opt"] == "login")
+            echo json_encode(login($_POST["email"], $_POST["password"], $_POST["remember"]));
+    }
+}
+// GET
+elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_GET["opt"])) {
+        // READ
+        if ($_GET["opt"] == "read_All")
+            echo json_encode(read_All());
 
-  <!-- Jquery  -->
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-  <!-- Jquery end -->
+        elseif ($_GET["opt"] == "read_Specific")
+            echo json_encode(read_Specific($_GET["id"]));
 
-  <!-- Bootstrap Js -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-  <!-- Bootstrap Js -->
+        // DELETE
+        elseif ($_GET["opt"] == "delete_User")
+            echo json_encode(delete_User($_GET["id"]));
 
-  <script type="text/javascript" src="./assets/js/login.js"></script>
-</head>
-
-<body>
-  <?php
-  require_once  __DIR__ . "/assets/controller/sql_functions.php";
-
-  validate_Session_Direct_Main();
-  ?>
-
-  <div class="container">
-    <h1>LOGIN - CRUDS Template</h1>
-    <div class="row mt-5">
-      <div class="col-xl-7 mx-auto">
-        <form action="" id="login_Form">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="text-center">APP</h5>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title text-center">User Login</h5>
-
-              <div class="row justify-content-center">
-                <div class="col-xl-10">
-                  <div class="form-floating mb-3">
-                    <input required type="email" class="form-control" id="login_Input_Email" placeholder="email" value="ahmet@hotmail.com" />
-                    <label for="login_Input_Email">Email address</label>
-                  </div>
-
-                  <div class="form-floating">
-                    <input required type="password" class="form-control" id="login_Input_Password" placeholder="pass" value="User4321!" />
-                    <label for="login_Input_Password">Password</label>
-                  </div>
-
-                  <div class="form-check form-check-inline mt-3">
-                    <input class="form-check-input" type="checkbox" id="login_Remember" value="1" />
-                    <label class="form-check-label" for="login_Remember">Remember Me</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer text-body-secondary text-center">
-              <button class="btn btn-primary" type="submit">Submit</button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="col-xl-7 mt-3 mx-auto">
-        Email - ahmet@hotmail.com <br />
-        Password - User4321!
-      </div>
-    </div>
-  </div>
-</body>
-
-</html>
+        // SESSION
+        elseif ($_GET["opt"] == "log_Out")
+            echo json_encode(log_Out());
+    }
+}

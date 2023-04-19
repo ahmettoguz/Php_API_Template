@@ -6,7 +6,7 @@ session_start();
 function create_User($email, $password, $name, $surname)
 {
     // if everyone can create new user so that shouldn't validated.
-    validate_Session_Direct_Login();
+    validate_Session();
 
 
     // html, js injection preventation
@@ -37,7 +37,7 @@ function create_User($email, $password, $name, $surname)
 // READ -------------------------------------------------------------------------------------------------------------------
 function read_All()
 {
-    validate_Session_Direct_Login();
+    validate_Session();
 
     global $db;
 
@@ -58,7 +58,7 @@ function read_All()
 function read_Joined()
 {
 
-    validate_Session_Direct_Login();
+    validate_Session();
 
     global $db;
 
@@ -81,7 +81,7 @@ function read_Joined()
 
 function read_Specific($id)
 {
-    validate_Session_Direct_Login();
+    validate_Session();
 
     global $db;
 
@@ -106,7 +106,7 @@ function read_Specific($id)
 // DELETE -------------------------------------------------------------------------------------------------------------------
 function delete_User($id)
 {
-    validate_Session_Direct_Login();
+    validate_Session();
 
     global $db;
 
@@ -127,7 +127,7 @@ function delete_User($id)
 // UPDATE -------------------------------------------------------------------------------------------------------------------
 function update_User($id, $email, $password, $name, $surname)
 {
-    validate_Session_Direct_Login();
+    validate_Session();
 
     // html, js injection preventation
     $email = filter_var($email, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -160,24 +160,17 @@ function update_User($id, $email, $password, $name, $surname)
 
 // SESSION -------------------------------------------------------------------------------------------------------------------
 
-function validate_Session_Direct_Login()
+function validate_Session()
 {
     // 2 direct method not to create loop
     if (!has_Valid_Session()) {
-        header("Location: ./../../index.php");
-        exit;
+        // die(json_encode(array('message' => 'ERROR', 'code' => 1337)));
+        die(json_encode("❌❌❌ NOT Authenticated ❌❌❌"));
     }
 }
 
-function validate_Session_Direct_Main()
-{
-    if (has_Valid_Session()) {
-        header("Location: ./assets/views/main.php");
-        exit;
-    }
-}
 
-function perform_Login_Operation($email, $password, $remember)
+function login($email, $password, $remember)
 {
     global $db;
 
@@ -227,6 +220,8 @@ function log_Out()
     session_destroy();
 
     // header("Location:http://localhost/AhmetOguzErgin/Web/project_manager/");
+
+    return true;
 }
 
 function get_Session()
